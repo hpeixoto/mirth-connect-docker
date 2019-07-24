@@ -11,8 +11,8 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./data/portainer_data:/data"
 
-  mirthdb1:
-    container_name: mirthdb1
+  nextgendb1:
+    container_name: nextgendb1
     image: mysql:5.6
     command: mysqld --innodb-buffer-pool-size=20M
     volumes:
@@ -25,8 +25,8 @@ services:
     ports:
       - "3311:3306"
 
-  mirthdb2:
-    container_name: mirthdb2
+  nextgendb2:
+    container_name: nextgendb2
     image: mysql:5.6
     command: mysqld --innodb-buffer-pool-size=20M
     volumes:
@@ -39,36 +39,35 @@ services:
     ports:
       - "3312:3306"
 
-  mirthconnect1:
+  nextgen1:
     build: mirth-connect
     image: fabrom/mirth-connect
-    container_name: mirthconnect1
+    container_name: nextgen1
     volumes:
       - "./mirth-connect/mirth.properties:/opt/mirth-connect/conf/mirth.properties:rw"
-      - "./data/spool_mirth/:/var/spool/mirth/:rw"
+      - "./data/spool_nextgen/:/var/spool/mirth/:rw"
     ports:
       - "9091:8080"
       - "9441:8443"
     links:
-      - mirthdb1
+      - nextgendb1
     depends_on:
-      - mirthdb1
+      - nextgendb1
 
-  mirthconnect2:
+  nextgen2:
     build: mirth-connect
     image: fabrom/mirth-connect
-    container_name: mirthconnect2
+    container_name: nextgen2
     volumes:
       - "./mirth-connect/mirth2.properties:/opt/mirth-connect/conf/mirth.properties:rw"
-      - "./data/spool_mirth2/:/var/spool/mirth/:rw"
+      - "./data/spool_nextgen2/:/var/spool/mirth/:rw"
     ports:
       - "9092:8081"
       - "9442:8444"
       - "6661:6661"
-      - "6662:6662"
     links:
-      - mirthdb2
-      - mirthconnect1
+      - nextgendb2
+      - nextgen1
     depends_on:
-      - mirthdb2
-      - mirthconnect1
+      - nextgendb2
+      - nextgen1
