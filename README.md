@@ -1,21 +1,23 @@
-# mirth-connect-docker
+I used a VirtualBox 16.04 Ubuntu server virtual machine. You have to do the portforwarding according to your needs on the machine settings.
 
-Mirth-Connect Docker Stack with 2 instances (Mirth-Connect container + Mysql container + Portainer)
+# NextGen-docker
+
+NextGen Docker Stack with 2 instances (NextGen container + Mysql container + Portainer)
 
 ## Prerequirements
 
 - Docker
 - Java
 
-## Build Mirth-Connect docker image
+## Build # NextGen-Docker image
 
   > \> docker-compose build --force-rm --no-cache --pull --parallel
 
-## Start Mirth-Connect-Docker stack
+## Start# NextGen-Docker stack
 
   > \> docker-compose up -d
 
-## Stop Mirth-Connect-Docker stack
+## Stop NextGen-Docker stack
 
   > \> docker-compose down
 
@@ -29,13 +31,13 @@ mirthdb2
 Use your preferred MySQL client connected to *localhost* port *3312*
 (admin user: *root* / password: *password*)
 
-### Mirth database
+### NextGen database
 
 - database: *mirthdb*
 - user: *mirth*
 - password: *password*
 
-## Connect to Mirth-Connect
+## Connect to NextGen
 
 Double-click on *./webstart.jnlp* to start the Mirth-Connect client
 (user: *admin* / password: *admin* )
