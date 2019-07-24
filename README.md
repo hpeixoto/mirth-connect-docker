@@ -1,6 +1,6 @@
 # mirth-connect-docker
 
-Mirth-Connect Docker Stack (Mirth-Connect container + Mysql container + PHPMyAdmin container)
+Mirth-Connect Docker Stack with 2 instances (Mirth-Connect container + Mysql container + Portainer)
 
 ## Prerequirements
 
@@ -19,20 +19,19 @@ Mirth-Connect Docker Stack (Mirth-Connect container + Mysql container + PHPMyAdm
 
   > \> docker-compose down
 
-## Connect to PHPMyAdmin
-
-- url: [http://localhost:8181]()
-- user: *root*
-- password: *password*
-
 ## Connect to MySQL
 
-Use your preferred MySQL client connected to *localhost* port *3306*
+mirthdb1:
+Use your preferred MySQL client connected to *localhost* port *3311*
+(admin user: *root* / password: *password*)
+
+mirthdb2
+Use your preferred MySQL client connected to *localhost* port *3312*
 (admin user: *root* / password: *password*)
 
 ### Mirth database
 
-- database: *mirth-test*
+- database: *mirthdb*
 - user: *mirth*
 - password: *password*
 
@@ -43,7 +42,7 @@ Double-click on *./webstart.jnlp* to start the Mirth-Connect client
 
 or
 
-browse to [http://localhost:8080]() to access web client.
+browse to [http://localhost:8081]() to access web client.
 
 ## Change configuration
 
