@@ -1,44 +1,74 @@
 version: '2'
 
 services:
-  mirth-database:
-    container_name: mc-mysql
+  portainer:
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    ports:
+      - 9000:9000
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./data/portainer_data:/data"
+
+  mirthdb1:
+    container_name: mirthdb1
     image: mysql:5.6
     command: mysqld --innodb-buffer-pool-size=20M
     volumes:
-      - "./data/db:/var/lib/mysql:rw"
+      - "./data/db1:/var/lib/mysql:rw"
     environment:
-      - "MYSQL_DATABASE=mirth-test"
+      - "MYSQL_DATABASE=mirthdb"
       - "MYSQL_USER=mirth"
       - "MYSQL_PASSWORD=password"
       - "MYSQL_ROOT_PASSWORD=password"
-    ports: 
-      - "3306:3306"
+    ports:
+      - "3311:3306"
 
-  mirth-connect:
+  mirthdb2:
+    container_name: mirthdb2
+    image: mysql:5.6
+    command: mysqld --innodb-buffer-pool-size=20M
+    volumes:
+      - "./data/db2:/var/lib/mysql:rw"
+    environment:
+      - "MYSQL_DATABASE=mirthdb2"
+      - "MYSQL_USER=mirth"
+      - "MYSQL_PASSWORD=password"
+      - "MYSQL_ROOT_PASSWORD=password"
+    ports:
+      - "3312:3306"
+
+  mirthconnect1:
     build: mirth-connect
     image: fabrom/mirth-connect
-    container_name: mc-mirthconnect
+    container_name: mirthconnect1
     volumes:
       - "./mirth-connect/mirth.properties:/opt/mirth-connect/conf/mirth.properties:rw"
-      - "./data/spools/:/var/spool/mirth/:rw"
-    ports: 
-      - "8080:8080"
-      - "8443:8443"
-    links:
-      - mirth-database:mysql
-    depends_on:
-      - mirth-database
-
-  phpmyadmin:
-    container_name: mc-phpmyadmin
-    image: phpmyadmin/phpmyadmin:latest
+      - "./data/spool_mirth/:/var/spool/mirth/:rw"
     ports:
-      - "8181:80"
-    environment:
-      - "MYSQL_USERNAME=root"
-      - "MYSQL_PASSWORD=password"
+      - "9091:8080"
+      - "9441:8443"
     links:
-      - mirth-database:db
+      - mirthdb1
     depends_on:
-      - mirth-database
+      - mirthdb1
+
+  mirthconnect2:
+    build: mirth-connect
+    image: fabrom/mirth-connect
+    container_name: mirthconnect2
+    volumes:
+      - "./mirth-connect/mirth2.properties:/opt/mirth-connect/conf/mirth.properties:rw"
+      - "./data/spool_mirth2/:/var/spool/mirth/:rw"
+    ports:
+      - "9092:8081"
+      - "9442:8444"
+      - "6661:6661"
+      - "6662:6662"
+    links:
+      - mirthdb2
+      - mirthconnect1
+    depends_on:
+      - mirthdb2
+      - mirthconnect1
